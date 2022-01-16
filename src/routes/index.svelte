@@ -2,6 +2,8 @@
   import Keyboard from '../components/Keyboard.svelte';
   import Board from '../components/Board.svelte';
   import { solution } from '../stores';
+  import { solutions, allWords } from '../words';
+  import { onMount } from 'svelte';
 
   const MAX_GUESSES = 6;
   const WORD_LENGTH = 5;
@@ -12,6 +14,12 @@
 
   solution.subscribe((value) => {
     solutionWord = value;
+    // console.log(solutionWord);
+  });
+
+  onMount(() => {
+    const randomIndex = Math.floor(Math.random() * solutions.length);
+    solution.set(solutions[randomIndex]);
   });
 
   function handleInput(event) {
@@ -31,7 +39,10 @@
       return;
     }
 
-    // check if word is valid word
+    if (!allWords.includes(currentWord)) {
+      alert('Invalid word');
+      return;
+    }
 
     guesses = [...guesses, currentWord];
 
